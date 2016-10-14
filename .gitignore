@@ -31,3 +31,4 @@ nginx-plus-ingress
 *.crt
 *.key
 
+.idea
