@@ -1,6 +1,5 @@
 {{range $upstream := .Upstreams}}
 upstream {{$upstream.Name}} {
-	least_conn;
 	{{range $server := $upstream.UpstreamServers}}
 	server {{$server.Address}}:{{$server.Port}};{{end}}
 }{{end}}
