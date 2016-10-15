@@ -31,8 +31,11 @@ container: test nginx-ingress
 	docker build -t $(PREFIX):$(TAG) .
 
 push: container
-	$(GCLOUD) docker push $(PREFIX):$(TAG)
-
+ifeq ($(PUSH_TO_GCR),1)
+	$(GCLOUD) docker --  push $(PREFIX):$(TAG)
+else
+    docker push $(PREFIX):$(TAG)
+endif
 osx:
 ifeq ($(BUILD_IN_CONTAINER),1)
 	$(DOCKER_RUN) -e CGO_ENABLED=0 -e GOOS=darwin $(GOLANG_CONTAINER) go build -a -installsuffix cgo -ldflags '-w' -o nginx-ingress *.go
