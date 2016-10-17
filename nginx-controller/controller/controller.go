@@ -315,6 +315,9 @@ func (lbc *LoadBalancerController) syncCfgm(key string) {
 		if clientMaxBodySize, exists := cfgm.Data["client-max-body-size"]; exists {
 			cfg.ClientMaxBodySize = clientMaxBodySize
 		}
+		if mainServerWorkerProcesses, exists := cfgm.Data["worker-processes"]; exists {
+			cfg.MainServerWorkerProcesses = mainServerWorkerProcesses
+		}
 		if serverNamesHashBucketSize, exists := cfgm.Data["server-names-hash-bucket-size"]; exists {
 			cfg.MainServerNamesHashBucketSize = serverNamesHashBucketSize
 		}
