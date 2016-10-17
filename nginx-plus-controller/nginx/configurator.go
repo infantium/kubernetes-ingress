@@ -184,7 +184,9 @@ func (cnf *Configurator) createConfig(ingEx *IngressEx) Config {
 	if clientMaxBodySize, exists := ingEx.Ingress.Annotations["nginx.org/client-max-body-size"]; exists {
 		ingCfg.ClientMaxBodySize = clientMaxBodySize
 	}
-
+	if mainServerWorkerProcesses, exists := ingEx.Ingress.Annotations["nginx.org/worker-processes"]; exists {
+		ingCfg.ClientMaxBodySize = mainServerWorkerProcesses
+	}
 	return ingCfg
 }
 
@@ -238,6 +240,7 @@ func createLocation(path string, upstream Upstream, cfg *Config, websocket bool)
 		ProxyConnectTimeout: cfg.ProxyConnectTimeout,
 		ProxyReadTimeout:    cfg.ProxyReadTimeout,
 		ClientMaxBodySize:   cfg.ClientMaxBodySize,
+		MainServerWorkerProcesses:   cfg.MainServerWorkerProcesses,
 		Websocket:           websocket,
 	}
 
@@ -323,6 +326,7 @@ func (cnf *Configurator) UpdateConfig(config *Config) {
 
 	cnf.config = config
 	mainCfg := &NginxMainConfig{
+		MainServerWorkerProcesses: config.MainServerWorkerProcesses,
 		ServerNamesHashBucketSize: config.MainServerNamesHashBucketSize,
 		ServerNamesHashMaxSize:    config.MainServerNamesHashMaxSize,
 	}

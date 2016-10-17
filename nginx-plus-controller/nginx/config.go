@@ -7,6 +7,7 @@ type Config struct {
 	ClientMaxBodySize             string
 	MainServerNamesHashBucketSize string
 	MainServerNamesHashMaxSize    string
+	MainServerWorkerProcesses     string
 }
 
 // NewDefaultConfig creates a Config with default values
@@ -16,5 +17,6 @@ func NewDefaultConfig() *Config {
 		ProxyReadTimeout:           "60s",
 		ClientMaxBodySize:          "1m",
 		MainServerNamesHashMaxSize: "512",
+		MainServerWorkerProcesses:  "auto",
 	}
 }
