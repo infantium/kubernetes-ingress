@@ -194,6 +194,7 @@ func createLocation(path string, upstream Upstream, cfg *Config, websocket bool)
 		ProxyConnectTimeout: cfg.ProxyConnectTimeout,
 		ProxyReadTimeout:    cfg.ProxyReadTimeout,
 		ClientMaxBodySize:   cfg.ClientMaxBodySize,
+		MainServerWorkerProcesses:   cfg.MainServerWorkerProcesses,
 		Websocket:           websocket,
 	}
 
@@ -262,6 +263,7 @@ func (cnf *Configurator) UpdateConfig(config *Config) {
 
 	cnf.config = config
 	mainCfg := &NginxMainConfig{
+		MainServerWorkerProcesses: config.MainServerWorkerProcesses,
 		ServerNamesHashBucketSize: config.MainServerNamesHashBucketSize,
 		ServerNamesHashMaxSize:    config.MainServerNamesHashMaxSize,
 	}
