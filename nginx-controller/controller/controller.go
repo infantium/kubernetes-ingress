@@ -324,6 +324,9 @@ func (lbc *LoadBalancerController) syncCfgm(key string) {
 		if mainServerWorkerRLimitNofile, exists := cfgm.Data["worker-rlimit-nofile"]; exists {
 			cfg.MainServerWorkerRLimitNofile = mainServerWorkerRLimitNofile
 		}
+		if mainServerKeepaliveTimeout, exists := cfgm.Data["keepalive_timeout"]; exists {
+			cfg.MainServerKeepaliveTimeout = mainServerKeepaliveTimeout
+		}
 		if serverNamesHashBucketSize, exists := cfgm.Data["server-names-hash-bucket-size"]; exists {
 			cfg.MainServerNamesHashBucketSize = serverNamesHashBucketSize
 		}

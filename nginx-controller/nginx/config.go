@@ -9,6 +9,7 @@ type Config struct {
 	MainServerWorkerProcesses     string
 	MainServerWorkerConnections     string
 	MainServerWorkerRLimitNofile     string
+	MainServerKeepaliveTimeout     string
 	MainServerNamesHashMaxSize    string
 }
 
@@ -22,5 +23,6 @@ func NewDefaultConfig() *Config {
 		MainServerWorkerProcesses:  "auto",
 		MainServerWorkerConnections:  "1024",
 		MainServerWorkerRLimitNofile:  "2048",
+		MainServerKeepaliveTimeout:  "65",
 	}
 }

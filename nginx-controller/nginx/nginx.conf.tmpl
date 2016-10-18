@@ -1,19 +1,16 @@
 
 user  nginx;
-worker_processes  1;
-#worker_processes  {{.ServerWorkerProcesses}};
+worker_processes  {{.ServerWorkerProcesses}};
 
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
 
 
 events {
-    worker_connections  1024;
-    #worker_connections  {{.ServerWorkerConnections}};
+    worker_connections  {{.ServerWorkerConnections}};
 }
 
-worker_rlimit_nofile 2048;
-#worker_rlimit_nofile {{.ServerWorkerRLimitNofile}};
+worker_rlimit_nofile {{.ServerWorkerRLimitNofile}};
 
 http {
     include       /etc/nginx/mime.types;
@@ -28,7 +25,7 @@ http {
     sendfile        on;
     #tcp_nopush     on;
 
-    keepalive_timeout  65;
+    keepalive_timeout  {{.ServerKeepaliveTimeout}};
 
     #gzip  on;
 

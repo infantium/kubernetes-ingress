@@ -193,7 +193,6 @@ func createLocation(path string, upstream Upstream, cfg *Config, websocket bool)
 		ProxyConnectTimeout: cfg.ProxyConnectTimeout,
 		ProxyReadTimeout:    cfg.ProxyReadTimeout,
 		ClientMaxBodySize:   cfg.ClientMaxBodySize,
-		MainServerWorkerProcesses:   cfg.MainServerWorkerProcesses,
 		Websocket:           websocket,
 	}
 
@@ -265,6 +264,7 @@ func (cnf *Configurator) UpdateConfig(config *Config) {
 		ServerWorkerProcesses: config.MainServerWorkerProcesses,
 		ServerWorkerConnections: config.MainServerWorkerConnections,
 		ServerWorkerRLimitNofile: config.MainServerWorkerRLimitNofile,
+		MainServerKeepaliveTimeout: config.MainServerKeepaliveTimeout,
 		ServerNamesHashBucketSize: config.MainServerNamesHashBucketSize,
 		ServerNamesHashMaxSize:    config.MainServerNamesHashMaxSize,
 	}

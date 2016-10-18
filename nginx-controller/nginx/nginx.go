@@ -52,9 +52,6 @@ type Location struct {
 	ProxyConnectTimeout string
 	ProxyReadTimeout    string
 	ClientMaxBodySize   string
-	MainServerWorkerProcesses   string
-	MainServerWorkerConnections   string
-	MainServerWorkerRLimitNofile   string
 	Websocket           bool
 }
 
@@ -63,6 +60,7 @@ type NginxMainConfig struct {
 	ServerWorkerProcesses     string
 	ServerWorkerConnections   string
 	ServerWorkerRLimitNofile   string
+	MainServerKeepaliveTimeout string
 	ServerNamesHashBucketSize string
 	ServerNamesHashMaxSize    string
 }
