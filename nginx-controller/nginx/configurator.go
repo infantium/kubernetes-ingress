@@ -171,7 +171,6 @@ func (cnf *Configurator) createConfig(ingEx *IngressEx) Config {
 	if clientMaxBodySize, exists := ingEx.Ingress.Annotations["nginx.org/client-max-body-size"]; exists {
 		ingCfg.ClientMaxBodySize = clientMaxBodySize
 	}
-
 	return ingCfg
 }
 
@@ -263,7 +262,9 @@ func (cnf *Configurator) UpdateConfig(config *Config) {
 
 	cnf.config = config
 	mainCfg := &NginxMainConfig{
-		MainServerWorkerProcesses: config.MainServerWorkerProcesses,
+		ServerWorkerProcesses: config.MainServerWorkerProcesses,
+		ServerWorkerConnections: config.MainServerWorkerConnections,
+		ServerWorkerRLimitNofile: config.MainServerWorkerRLimitNofile,
 		ServerNamesHashBucketSize: config.MainServerNamesHashBucketSize,
 		ServerNamesHashMaxSize:    config.MainServerNamesHashMaxSize,
 	}

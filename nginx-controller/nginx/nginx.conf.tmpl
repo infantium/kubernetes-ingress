@@ -1,16 +1,19 @@
 
 user  nginx;
-worker_processes  {{.MainServerWorkerProcesses}};
+worker_processes  1;
+#worker_processes  {{.ServerWorkerProcesses}};
 
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
 
 
 events {
-    worker_connections  8096;
+    worker_connections  1024;
+    #worker_connections  {{.ServerWorkerConnections}};
 }
 
-worker_rlimit_nofile 40000;
+worker_rlimit_nofile 2048;
+#worker_rlimit_nofile {{.ServerWorkerRLimitNofile}};
 
 http {
     include       /etc/nginx/mime.types;

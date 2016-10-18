@@ -53,12 +53,16 @@ type Location struct {
 	ProxyReadTimeout    string
 	ClientMaxBodySize   string
 	MainServerWorkerProcesses   string
+	MainServerWorkerConnections   string
+	MainServerWorkerRLimitNofile   string
 	Websocket           bool
 }
 
 // NginxMainConfig describe the main NGINX configuration file
 type NginxMainConfig struct {
-	MainServerWorkerProcesses string
+	ServerWorkerProcesses     string
+	ServerWorkerConnections   string
+	ServerWorkerRLimitNofile   string
 	ServerNamesHashBucketSize string
 	ServerNamesHashMaxSize    string
 }

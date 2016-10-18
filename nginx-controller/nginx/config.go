@@ -7,6 +7,8 @@ type Config struct {
 	ClientMaxBodySize             string
 	MainServerNamesHashBucketSize string
 	MainServerWorkerProcesses     string
+	MainServerWorkerConnections     string
+	MainServerWorkerRLimitNofile     string
 	MainServerNamesHashMaxSize    string
 }
 
@@ -18,5 +20,7 @@ func NewDefaultConfig() *Config {
 		ClientMaxBodySize:          "1m",
 		MainServerNamesHashMaxSize: "512",
 		MainServerWorkerProcesses:  "auto",
+		MainServerWorkerConnections:  "1024",
+		MainServerWorkerRLimitNofile:  "2048",
 	}
 }

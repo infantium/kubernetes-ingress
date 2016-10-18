@@ -318,6 +318,12 @@ func (lbc *LoadBalancerController) syncCfgm(key string) {
 		if mainServerWorkerProcesses, exists := cfgm.Data["worker-processes"]; exists {
 			cfg.MainServerWorkerProcesses = mainServerWorkerProcesses
 		}
+		if mainServerWorkerConnections, exists := cfgm.Data["worker-connections"]; exists {
+			cfg.MainServerWorkerConnections = mainServerWorkerConnections
+		}
+		if mainServerWorkerRLimitNofile, exists := cfgm.Data["worker-rlimit-nofile"]; exists {
+			cfg.MainServerWorkerRLimitNofile = mainServerWorkerRLimitNofile
+		}
 		if serverNamesHashBucketSize, exists := cfgm.Data["server-names-hash-bucket-size"]; exists {
 			cfg.MainServerNamesHashBucketSize = serverNamesHashBucketSize
 		}
