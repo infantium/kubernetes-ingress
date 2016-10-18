@@ -264,7 +264,7 @@ func (cnf *Configurator) UpdateConfig(config *Config) {
 		ServerWorkerProcesses: config.MainServerWorkerProcesses,
 		ServerWorkerConnections: config.MainServerWorkerConnections,
 		ServerWorkerRLimitNofile: config.MainServerWorkerRLimitNofile,
-		MainServerKeepaliveTimeout: config.MainServerKeepaliveTimeout,
+		ServerKeepaliveTimeout: config.MainServerKeepaliveTimeout,
 		ServerNamesHashBucketSize: config.MainServerNamesHashBucketSize,
 		ServerNamesHashMaxSize:    config.MainServerNamesHashMaxSize,
 	}

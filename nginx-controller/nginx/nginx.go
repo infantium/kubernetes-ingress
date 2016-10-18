@@ -60,7 +60,7 @@ type NginxMainConfig struct {
 	ServerWorkerProcesses     string
 	ServerWorkerConnections   string
 	ServerWorkerRLimitNofile   string
-	MainServerKeepaliveTimeout string
+	ServerKeepaliveTimeout string
 	ServerNamesHashBucketSize string
 	ServerNamesHashMaxSize    string
 }
