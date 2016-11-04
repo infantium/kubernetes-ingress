@@ -11,6 +11,27 @@ import (
 	"github.com/golang/glog"
 )
 
+const statusAndUpstreamConfAPIsConf = `server {
+    listen 8080;
+
+    root /usr/share/nginx/html;
+
+		access_log off;
+
+    location = /status.html {
+    }
+
+    location /status {
+        status;
+    }
+
+		location /upstream_conf {
+				upstream_conf;
+				allow 127.0.0.1;
+				deny all;
+		}
+}`
+
 // NginxController Updates NGINX configuration, starts and reloads NGINX
 type NginxController struct {
 	nginxConfdPath string
@@ -28,6 +49,7 @@ type IngressNginxConfig struct {
 type Upstream struct {
 	Name            string
 	UpstreamServers []UpstreamServer
+	StickyCookie    string
 }
 
 // UpstreamServer describes a server in an NGINX upstream
@@ -39,6 +61,7 @@ type UpstreamServer struct {
 // Server describes an NGINX server
 type Server struct {
 	Name              string
+	StatusZone        string
 	Locations         []Location
 	SSL               bool
 	SSLCertificate    string
@@ -58,22 +81,8 @@ type Location struct {
 
 // NginxMainConfig describe the main NGINX configuration file
 type NginxMainConfig struct {
-	ServerWorkerProcesses     string
-	ServerWorkerConnections   string
-	ServerWorkerRLimitNofile   string
-	ServerKeepaliveTimeout string
 	ServerNamesHashBucketSize string
 	ServerNamesHashMaxSize    string
-}
-
-// NewUpstreamWithDefaultServer creates an upstream with the default server.
-// proxy_pass to an upstream with the default server returns 502.
-// We use it for services that have no endpoints
-func NewUpstreamWithDefaultServer(name string) Upstream {
-	return Upstream{
-		Name:            name,
-		UpstreamServers: []UpstreamServer{UpstreamServer{Address: "127.0.0.1", Port: "8181"}},
-	}
 }
 
 // NewNginxController creates a NGINX controller
@@ -86,12 +95,27 @@ func NewNginxController(nginxConfPath string, local bool) (*NginxController, err
 
 	if !local {
 		ngxc.createCertsDir()
+		ngxc.writeStatusAndUpstreamConfAPIsConf()
 	}
 
 	cfg := &NginxMainConfig{ServerNamesHashMaxSize: NewDefaultConfig().MainServerNamesHashMaxSize}
 	ngxc.UpdateMainConfigFile(cfg)
 
 	return &ngxc, nil
+}
+
+func (nginx *NginxController) writeStatusAndUpstreamConfAPIsConf() {
+	filename := nginx.getIngressNginxConfigFileName("status-and-upstream-conf.conf")
+	conf, err := os.Create(filename)
+	if err != nil {
+		glog.Fatalf("Couldn't create conf file %v: %v", filename, err)
+	}
+	defer conf.Close()
+
+	_, err = conf.WriteString(statusAndUpstreamConfAPIsConf)
+	if err != nil {
+		glog.Fatalf("Couldn't write to conf file %v: %v", filename, err)
+	}
 }
 
 // DeleteIngress deletes the configuration file, which corresponds for the
@@ -136,7 +160,6 @@ func (nginx *NginxController) AddOrUpdateCertAndKey(name string, cert string, ke
 		if err != nil {
 			glog.Fatalf("Couldn't write to pem file %v: %v", pemFileName, err)
 		}
-
 		_, err = pem.WriteString(cert)
 		if err != nil {
 			glog.Fatalf("Couldn't write to pem file %v: %v", pemFileName, err)

@@ -6,8 +6,8 @@ import (
 
 	"github.com/golang/glog"
 
-	"github.com/nginxinc/kubernetes-ingress/nginx-controller/controller"
-	"github.com/nginxinc/kubernetes-ingress/nginx-controller/nginx"
+	"github.com/nginxinc/kubernetes-ingress/nginx-plus-controller/controller"
+	"github.com/nginxinc/kubernetes-ingress/nginx-plus-controller/nginx"
 	"k8s.io/kubernetes/pkg/api"
 	client "k8s.io/kubernetes/pkg/client/unversioned"
 )
@@ -34,7 +34,7 @@ var (
 func main() {
 	flag.Parse()
 
-	glog.Infof("Starting NGINX Ingress controller Version %v\n", version)
+	glog.Infof("Starting NGINX Plus Ingress controller Version %v\n", version)
 
 	var kubeClient *client.Client
 	var local = false
@@ -55,7 +55,11 @@ func main() {
 	ngxc, _ := nginx.NewNginxController("/etc/nginx/", local)
 	ngxc.Start()
 	config := nginx.NewDefaultConfig()
-	cnf := nginx.NewConfigurator(ngxc, config)
+	nginxAPI, err := nginx.NewNginxAPIController("http://127.0.0.1:8080/upstream_conf", "http://127.0.0.1:8080/status", local)
+	if err != nil {
+		glog.Fatalf("Failed to create NginxAPIController: %v", err)
+	}
+	cnf := nginx.NewConfigurator(ngxc, config, nginxAPI)
 	lbc, _ := controller.NewLoadBalancerController(kubeClient, 30*time.Second, *watchNamespace, cnf, *nginxConfigMaps)
 	lbc.Run()
 }

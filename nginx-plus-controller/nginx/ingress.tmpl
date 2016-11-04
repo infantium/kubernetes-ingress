@@ -1,7 +1,10 @@
 {{range $upstream := .Upstreams}}
 upstream {{$upstream.Name}} {
-	{{range $server := $upstream.UpstreamServers}}
-	server {{$server.Address}}:{{$server.Port}};{{end}}
+	zone {{$upstream.Name}} 64k;
+	{{if $upstream.StickyCookie}}
+	sticky cookie {{$upstream.StickyCookie}};
+	{{end}}
+	state /var/lib/nginx/{{$upstream.Name}}.state;
 }{{end}}
 
 {{range $server := .Servers}}
@@ -11,16 +14,13 @@ server {
 	listen 443 ssl;
 	ssl_certificate {{$server.SSLCertificate}};
 	ssl_certificate_key {{$server.SSLCertificateKey}};
-	ssl_session_timeout 5m;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
-    ssl_prefer_server_ciphers on;
-	ssl_session_cache shared:SSL:10m;
 	{{end}}
 
 	{{if $server.Name}}
 	server_name {{$server.Name}};
 	{{end}}
+
+	status_zone {{$server.StatusZone}};
 
 	{{if $server.SSL}}
 	if ($scheme = http) {
