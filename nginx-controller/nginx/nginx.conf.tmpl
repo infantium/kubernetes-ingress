@@ -1,4 +1,4 @@
-
+load_module /usr/lib/nginx/modules/ngx_http_headers_more_filter_module.so;
 user  nginx;
 worker_processes  {{if .ServerWorkerProcesses}}{{.ServerWorkerProcesses}}{{else}}auto{{end}};
 
@@ -12,7 +12,11 @@ events {
 
 worker_rlimit_nofile {{if .ServerWorkerRLimitNofile}}{{.ServerWorkerRLimitNofile}}{{else}}2048{{end}};
 
+
 http {
+    more_set_headers "Server: Robbie";
+    server_tokens off;
+
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
 

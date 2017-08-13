@@ -1,7 +1,7 @@
 FROM alpine:3.6
 
 # Add nginx
-RUN apk add --update nginx
+RUN apk add --update nginx nginx-mod-http-headers-more --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
 
 # Add certificates
 RUN apk add --update ca-certificates java-cacerts --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
@@ -14,6 +14,8 @@ RUN ln -sf /proc/1/fd/1 /var/log/nginx/access.log \
 COPY ./docker/sysctl.conf /etc/
 
 COPY nginx-ingress nginx/ingress.tmpl nginx/nginx.conf.tmpl /
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 RUN rm /etc/nginx/conf.d/*
 
